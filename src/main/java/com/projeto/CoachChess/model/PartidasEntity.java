@@ -1,0 +1,44 @@
+package com.projeto.CoachChess.model;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import java.time.LocalDateTime;
+
+@AllArgsConstructor
+@Setter
+@Getter
+@NoArgsConstructor
+@Entity
+@Table(name = "CC_PARTIDAS_JOGADAS")
+public class PartidasEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(nullable = false)
+    private LocalDateTime dataInicio;
+
+    @Column(nullable = false)
+    private LocalDateTime dataFim;
+
+    @Column(nullable = false)
+    private double tempoPartida;
+
+    @Column(nullable = false)
+    private String resultadoPartida;
+
+    @ManyToOne
+    @JoinColumn(name = "jogador_pretas_id",nullable = false)
+    private JogadorEntity jogadorPretas;
+
+    @ManyToOne
+    @JoinColumn(name = "jogador_brancas_id",nullable = false)
+    private JogadorEntity jogadorBrancas;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String pgnCompleto;
+}
