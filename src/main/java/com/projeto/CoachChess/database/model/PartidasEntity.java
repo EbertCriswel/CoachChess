@@ -1,4 +1,4 @@
-package com.projeto.CoachChess.model;
+package com.projeto.CoachChess.database.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,28 +17,41 @@ public class PartidasEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private LocalDateTime dataInicio;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime dataFim;
 
-    @Column(nullable = false)
-    private double tempoPartida;
+    @Column
+    private Long duracaoSegundos;
 
-    @Column(nullable = false)
+    @Column(length = 20)
     private String resultadoPartida;
 
-    @ManyToOne
-    @JoinColumn(name = "jogador_pretas_id",nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+            name = "jogador_pretas_id",
+            nullable = false
+    )
     private JogadorEntity jogadorPretas;
 
-    @ManyToOne
-    @JoinColumn(name = "jogador_brancas_id",nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+            name = "jogador_brancas_id",
+            nullable = false
+    )
     private JogadorEntity jogadorBrancas;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String pgnCompleto;
+
+    @PrePersist
+    public void aoCriar() {
+        if (dataInicio == null) {
+            dataInicio = LocalDateTime.now();
+        }
+    }
 }
